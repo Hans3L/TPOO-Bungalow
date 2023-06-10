@@ -45,4 +45,14 @@ public class Bungalow {
     public void setStatusRoom(int statusRoom) {
         this.statusRoom = statusRoom;
     }
+
+    @Override
+    public String toString() {
+        return "Bungalow{" +
+                "Codigo =" + bungalowId +
+                ", Categoria =" + category +
+                ", precio x Dia =" + priceDay +
+                ", Estado =" + statusRoom +
+                '}';
+    }
 }
