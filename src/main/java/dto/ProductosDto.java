@@ -1,12 +1,12 @@
-package main.java.clases;
+package main.java.dto;
 
-public class Productos {
+public class ProductosDto {
     private int productId;
     private String detail;
     private int stock;
     private double priceUnit;
 
-    public Productos(int productId, String detail, int stock, double priceUnit) {
+    public ProductosDto(int productId, String detail, int stock, double priceUnit) {
         this.productId = productId;
         this.detail = detail;
         this.stock = stock;

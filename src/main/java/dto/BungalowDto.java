@@ -1,13 +1,16 @@
-package main.java.clases;
+package main.java.dto;
 
-public class Bungalow {
+public class BungalowDto {
 
     private int bungalowId;
     private int category;
     private double priceDay;
     private int statusRoom;
 
-    public Bungalow(int bungalowId, int category, double priceDay, int statusRoom) {
+    public BungalowDto(){
+    }
+
+    public BungalowDto(int bungalowId, int category, double priceDay, int statusRoom) {
         this.bungalowId = bungalowId;
         this.category = category;
         this.priceDay = priceDay;

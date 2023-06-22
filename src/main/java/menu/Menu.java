@@ -1,12 +1,16 @@
 package main.java.menu;
 
 import main.java.arreglos.UsuarioArray;
-import main.java.clases.Bungalow;
-import main.java.clases.Productos;
-import main.java.clases.Usuario;
+import main.java.dao.BungalowDao;
+import main.java.dao.BungalowImpl;
+import main.java.dto.BungalowDto;
+import main.java.dto.ProductosDto;
+import main.java.dto.UsuarioDto;
+import main.java.facade.BungalowFacade;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -14,17 +18,20 @@ public class Menu {
 
     private static final String USER = "admin"; // Reemplaza "usuario" con el valor correcto
     private static final String PASS = "admin"; // Reemplaza "contrasena" con el valor correcto
+    //private static BungalowImpl bungalowImpl = new BungalowDao();
+    private static BungalowFacade bungalowFacade = new BungalowFacade();
+    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
 
         login();
         UsuarioArray userArray;
 
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-        ArrayList<Productos> productos = new ArrayList<>();
-        ArrayList<Bungalow> bungalows = new ArrayList<>();
+        ArrayList<UsuarioDto> usuarios = new ArrayList<>();
+        ArrayList<ProductosDto> productos = new ArrayList<>();
+        ArrayList<BungalowDto> bungalows = new ArrayList<>();
 
-        Scanner scanner = new Scanner(System.in);
 
         int opcion;
         do {
@@ -54,7 +61,8 @@ public class Menu {
                     registrarProducto(scanner, productos);
                     break;
                 case 3:
-                    registrarHospedaje(scanner, bungalows);
+                    //registrarHospedaje(scanner, bungalows);
+                    registrarHospedaje();
                     break;
                 case 4:
                     buscarUsuario(scanner, usuarios);
@@ -63,7 +71,8 @@ public class Menu {
                     buscarProducto(scanner, productos);
                     break;
                 case 6:
-                    buscarHospedaje(scanner, bungalows);
+                    //buscarHospedaje(scanner, bungalows);
+                    buscarHospedaje();
                     break;
                 case 7:
                     eliminarUsuario(scanner, usuarios);
@@ -72,7 +81,8 @@ public class Menu {
                     eliminarProducto(scanner, productos);
                     break;
                 case 9:
-                    eliminarHospedaje(scanner, bungalows);
+                    //eliminarHospedaje(scanner, bungalows);
+                    eliminarHospedaje();
                     break;
                 case 10:
                     listarUsuarios(usuarios);
@@ -81,7 +91,7 @@ public class Menu {
                     listarProductos(productos);
                     break;
                 case 12:
-                    listarHospedajes(bungalows);
+                    listarHospedajes();
                     break;
                 case 0:
                     System.out.println("¡Hasta luego!");
@@ -94,26 +104,27 @@ public class Menu {
             System.out.println();
         } while (opcion != 0);
     }
-        private static void registrarUsuario(Scanner scanner, ArrayList <Usuario> usuarios) {
-            System.out.println("=== Registrar Usuario ===");
-            System.out.print("Código: ");
-            int codigo = scanner.nextInt();
-            scanner.nextLine(); // Limpiar el buffer de entrada
-            System.out.print("Nombre: ");
-            String nombre = scanner.nextLine();
-            System.out.print("Apellido: ");
-            String apellido = scanner.nextLine();
-            System.out.print("DNI: ");
-            String dni = scanner.nextLine();
-            System.out.print("Teléfono: ");
-            String telefono = scanner.nextLine();
 
-            Usuario usuario = new Usuario(codigo, nombre, apellido, dni, telefono);
-            usuarios.add(usuario);
-            System.out.println("¡Usuario registrado exitosamente!");
-        }
+    private static void registrarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+        System.out.println("=== Registrar Usuario ===");
+        System.out.print("Código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Apellido: ");
+        String apellido = scanner.nextLine();
+        System.out.print("DNI: ");
+        String dni = scanner.nextLine();
+        System.out.print("Teléfono: ");
+        String telefono = scanner.nextLine();
 
-    private static void registrarProducto(Scanner scanner, ArrayList<Productos> productos) {
+        UsuarioDto usuario = new UsuarioDto(codigo, nombre, apellido, dni, telefono);
+        usuarios.add(usuario);
+        System.out.println("¡Usuario registrado exitosamente!");
+    }
+
+    private static void registrarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
         System.out.println("=== Registrar Producto ===");
         System.out.print("ID del producto: ");
         int id = scanner.nextInt();
@@ -125,17 +136,18 @@ public class Menu {
         System.out.print("Precio unitario: ");
         double precioUnitario = scanner.nextDouble();
 
-        Productos producto = new Productos(id, detalles, stock, precioUnitario);
+        ProductosDto producto = new ProductosDto(id, detalles, stock, precioUnitario);
         productos.add(producto);
         System.out.println("¡Producto registrado exitosamente!");
     }
-    private static void eliminarUsuario(Scanner scanner, ArrayList<Usuario> usuarios) {
+
+    private static void eliminarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Eliminar Usuario===");
         System.out.print("Ingrese el código del usuario a eliminar: ");
         int codigo = scanner.nextInt();
 
         boolean usuarioEliminado = false;
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDto usuario : usuarios) {
             if (usuario.getUserId() == codigo) {
                 usuarios.remove(usuario);
                 usuarioEliminado = true;
@@ -150,29 +162,44 @@ public class Menu {
         }
     }
 
-    private static void listarUsuarios(ArrayList<Usuario> usuarios) {
+    private static void listarUsuarios(ArrayList<UsuarioDto> usuarios) {
         UsuarioArray usuarioArray;
         System.out.println("=== Listado de Usuarios ===");
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDto usuario : usuarios) {
             System.out.println(usuario);
         }
     }
 
-    private static void listarProductos(ArrayList<Productos> productos) {
+    private static void listarProductos(ArrayList<ProductosDto> productos) {
         System.out.println("=== Listado de Productos ===");
-        for (Productos producto : productos) {
+        for (ProductosDto producto : productos) {
             System.out.println(producto);
         }
     }
 
-    private static void listarHospedajes(ArrayList<Bungalow> hospedajes) {
+    /*private static void listarHospedajes(ArrayList<Bungalow> hospedajes) {
         System.out.println("=== Listado de Hospedajes ===");
         for (Bungalow hospedaje : hospedajes) {
             System.out.println(hospedaje);
         }
+    }*/
+    private static void listarHospedajes() {
+        List<BungalowDto> bungalowDto = bungalowFacade.getAllBungalow();
+        if (bungalowDto.isEmpty()) {
+            System.out.println("No hay habitaciones registradas");
+        } else {
+            System.out.println("Lista de Habitaciones Disponible!");
+            for (BungalowDto bungalow : bungalowDto) {
+                System.out.println("CODIGO: " + bungalow.getBungalowId());
+                System.out.println("CATEGORIA: " + bungalow.getCategory());
+                System.out.println("PRECIO: " + bungalow.getPriceDay());
+                System.out.println("ESTADO: " + bungalow.getStatusRoom());
+                System.out.println("---------------------");
+            }
+        }
     }
 
-    private static void registrarHospedaje(Scanner scanner, ArrayList<Bungalow> hospedajes) {
+    /*private static void registrarHospedaje(Scanner scanner, ArrayList<BungalowDto> hospedajes) {
         System.out.println("=== Registrar Hospedaje ===");
         System.out.print("Código: ");
         int codigo = scanner.nextInt();
@@ -185,18 +212,41 @@ public class Menu {
         System.out.print("Estado: ");
         int estado = scanner.nextInt();
 
-        Bungalow bungalow = new Bungalow(codigo, categoria, precioDia, estado);
+        BungalowDto bungalow = new BungalowDto(codigo, categoria, precioDia, estado);
         hospedajes.add(bungalow);
+        System.out.println("¡Hospedaje registrado exitosamente!");
+    }*/
+
+    private static void registrarHospedaje() {
+        System.out.println("=== Registrar Hospedaje ===");
+        System.out.print("Ingresa el código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Ingrese categoría: ");
+        int categoria = scanner.nextInt();
+        System.out.print("Ingrese Precio por día: ");
+        double precioDia = scanner.nextDouble();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Ingrese Estado: ");
+        int estado = scanner.nextInt();
+
+        BungalowDto bungalowDto = new BungalowDto();
+        bungalowDto.setBungalowId(codigo);
+        bungalowDto.setCategory(categoria);
+        bungalowDto.setPriceDay(precioDia);
+        bungalowDto.setStatusRoom(estado);
+
+        bungalowFacade.registerBungalow(bungalowDto);
         System.out.println("¡Hospedaje registrado exitosamente!");
     }
 
-    private static void buscarUsuario(Scanner scanner, ArrayList<Usuario> usuarios) {
+    private static void buscarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Buscar Usuario ===");
         System.out.print("Ingrese el código del usuario: ");
         int codigo = scanner.nextInt();
 
-        Usuario usuarioEncontrado = null;
-        for (Usuario usuario : usuarios) {
+        UsuarioDto usuarioEncontrado = null;
+        for (UsuarioDto usuario : usuarios) {
             if (usuario.getUserId() == codigo) {
                 usuarioEncontrado = usuario;
                 break;
@@ -211,13 +261,13 @@ public class Menu {
         }
     }
 
-    private static void buscarProducto(Scanner scanner, ArrayList<Productos> productos) {
+    private static void buscarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
         System.out.println("=== Buscar Producto ===");
         System.out.print("Ingrese el ID del producto: ");
         int id = scanner.nextInt();
 
-        Productos productoEncontrado = null;
-        for (Productos producto : productos) {
+        ProductosDto productoEncontrado = null;
+        for (ProductosDto producto : productos) {
             if (producto.getProductId() == id) {
                 productoEncontrado = producto;
                 break;
@@ -232,13 +282,13 @@ public class Menu {
         }
     }
 
-    private static void buscarHospedaje(Scanner scanner, ArrayList<Bungalow> bungalows) {
+    /*private static void buscarHospedaje(Scanner scanner, ArrayList<BungalowDto> bungalows) {
         System.out.println("=== Buscar Hospedaje ===");
         System.out.print("Ingrese el código del hospedaje: ");
         int codigo = scanner.nextInt();
 
-        Bungalow hospedajeEncontrado = null;
-        for (Bungalow bungalow : bungalows) {
+        BungalowDto hospedajeEncontrado = null;
+        for (BungalowDto bungalow : bungalows) {
             if (bungalow.getBungalowId() == codigo) {
                 hospedajeEncontrado = bungalow;
                 break;
@@ -251,15 +301,31 @@ public class Menu {
         } else {
             System.out.println("Hospedaje no encontrado.");
         }
+    }*/
+
+    private static void buscarHospedaje() {
+        System.out.println("=== Buscar Hospedaje ===");
+        System.out.print("Ingrese el código del hospedaje: ");
+        int codigo = scanner.nextInt();
+
+        BungalowDto bungalowDto = bungalowFacade.getBungalow(codigo);
+        if (bungalowDto != null) {
+            System.out.println("Codigo: " + bungalowDto.getBungalowId());
+            System.out.println("Categoria: " +bungalowDto.getCategory());
+            System.out.println("Precio x Dia: " +bungalowDto.getPriceDay());
+            System.out.println("Estado: " +bungalowDto.getStatusRoom());
+        } else {
+            System.out.println("No existe ese codigo de Bungalow");
+        }
     }
 
-    private static void eliminarProducto(Scanner scanner, ArrayList<Productos> productos) {
+    private static void eliminarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
         System.out.println("=== Eliminar Producto ===");
         System.out.print("Ingrese el ID del producto a eliminar: ");
         int id = scanner.nextInt();
 
         boolean productoEliminado = false;
-        for (Productos producto : productos) {
+        for (ProductosDto producto : productos) {
             if (producto.getProductId() == id) {
                 productos.remove(producto);
                 productoEliminado = true;
@@ -274,13 +340,13 @@ public class Menu {
         }
     }
 
-    private static void eliminarHospedaje(Scanner scanner, ArrayList<Bungalow> bungalows) {
+    /*private static void eliminarHospedaje(Scanner scanner, ArrayList<BungalowDto> bungalows) {
         System.out.println("=== Eliminar Hospedaje ===");
         System.out.print("Ingrese el código del hospedaje a eliminar: ");
         int codigo = scanner.nextInt();
 
         boolean hospedajeEliminado = false;
-        for (Bungalow bungalow : bungalows) {
+        for (BungalowDto bungalow : bungalows) {
             if (bungalow.getBungalowId() == codigo) {
                 bungalows.remove(bungalow);
                 hospedajeEliminado = true;
@@ -292,6 +358,19 @@ public class Menu {
             System.out.println("Hospedaje eliminado exitosamente.");
         } else {
             System.out.println("Hospedaje no encontrado.");
+        }
+    }*/
+
+    private static void eliminarHospedaje() {
+        System.out.println("=== Eliminar Hospedaje ===");
+        System.out.print("Ingrese el código del hospedaje a eliminar: ");
+        int codigo = scanner.nextInt();
+        BungalowDto bungalowDto = bungalowFacade.getBungalow(codigo);
+        if (bungalowDto != null) {
+            bungalowFacade.deleteBungalow(codigo);
+            System.out.println("El Bungalow se elimino correctamente");
+        } else {
+            System.out.println("No se encontro Bungalow con ese codigo");
         }
     }
 

@@ -1,6 +1,6 @@
-package main.java.clases;
+package main.java.dto;
 
-public class Usuario {
+public class UsuarioDto {
 
     private int userId;
     private String name;
@@ -8,7 +8,7 @@ public class Usuario {
     private String dni;
     private String telefono;
 
-    public Usuario(int userId, String name, String lastName, String dni, String telefono) {
+    public UsuarioDto(int userId, String name, String lastName, String dni, String telefono) {
         this.userId = userId;
         this.name = name;
         this.lastName = lastName;
