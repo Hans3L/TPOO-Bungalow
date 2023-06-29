@@ -1,12 +1,11 @@
 package main.java.menu;
 
 import main.java.arreglos.UsuarioArray;
-import main.java.dao.BungalowDao;
-import main.java.dao.BungalowImpl;
 import main.java.dto.BungalowDto;
 import main.java.dto.ProductosDto;
 import main.java.dto.UsuarioDto;
 import main.java.facade.BungalowFacade;
+import main.java.facade.UsuarioFacade;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -18,12 +17,11 @@ public class Menu {
 
     private static final String USER = "admin"; // Reemplaza "usuario" con el valor correcto
     private static final String PASS = "admin"; // Reemplaza "contrasena" con el valor correcto
-    //private static BungalowImpl bungalowImpl = new BungalowDao();
     private static BungalowFacade bungalowFacade = new BungalowFacade();
+    private static UsuarioFacade usuarioFacade = new UsuarioFacade();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-
 
         login();
         UsuarioArray userArray;
@@ -32,8 +30,42 @@ public class Menu {
         ArrayList<ProductosDto> productos = new ArrayList<>();
         ArrayList<BungalowDto> bungalows = new ArrayList<>();
 
-
         int opcion;
+        do {
+            System.out.println("==== MENÚ ====");
+            System.out.println("1. Usuario");
+            System.out.println("2. Bungalow");
+            System.out.println("3. Producto");
+            System.out.println("0. Salir");
+            System.out.print("Ingrese una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    clearScreen();
+                    menuUsuario(scanner, usuarios);
+                    break;
+                case 2:
+                    clearScreen();
+                    menuBungalow();
+                    break;
+                case 3:
+                    clearScreen();
+                    menuProducto();
+                    break;
+                case 0:
+                    System.out.println("¡Hasta luego!");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+
+            System.out.println();
+        } while (opcion != 0);
+
+       /* int opcion;
         do {
             System.out.println("==== MENÚ ====");
             System.out.println("1. Registrar usuario");
@@ -85,7 +117,8 @@ public class Menu {
                     eliminarHospedaje();
                     break;
                 case 10:
-                    listarUsuarios(usuarios);
+                    //listarUsuarios(usuarios);
+                    listarUsuarios();
                     break;
                 case 11:
                     listarProductos(productos);
@@ -95,6 +128,128 @@ public class Menu {
                     break;
                 case 0:
                     System.out.println("¡Hasta luego!");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+
+            System.out.println();
+        } while (opcion != 0);*/
+    }
+
+    public static void menuUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+        int opcion;
+        do {
+            System.out.println("==== MANTENIMIENTO DE USUARIOS ====");
+            System.out.println("1. Registrar usuario");
+            System.out.println("2. Buscar usuario");
+            System.out.println("3. Eliminar usuario");
+            System.out.println("4. Listar usuarios");
+            System.out.println("0. Volver");
+            System.out.print("Ingrese una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    clearScreen();
+                    registrarUsuario(scanner, usuarios);
+                    break;
+                case 2:
+                    clearScreen();
+                    buscarUsuario(scanner, usuarios);
+                    break;
+                case 3:
+                    clearScreen();
+                    eliminarUsuario(scanner, usuarios);
+                    break;
+                case 4:
+                    clearScreen();
+                    listarUsuarios();
+                    break;
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+
+            System.out.println();
+        } while (opcion != 0);
+    }
+
+    public static void menuProducto() {
+        int opcion;
+        do {
+            System.out.println("==== MANTENIMIENTO DE PRODUCTO ====");
+            System.out.println("1. Registrar producto");
+            System.out.println("2. Buscar producto");
+            System.out.println("3. Eliminar producto");
+            System.out.println("4. Listar producto");
+            System.out.println("0. Volver");
+            System.out.print("Ingrese una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    //registrarProductos();
+                    break;
+                case 2:
+                    //buscarProductos();
+                    break;
+                case 3:
+                    //eliminarProductos();
+                    break;
+                case 4:
+                    //listarProductos();
+                    break;
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+
+            System.out.println();
+        } while (opcion != 0);
+    }
+
+    public static void menuBungalow() {
+        int opcion;
+        do {
+            System.out.println("==== MANTENIMIENTO DE BUNGALOW ====");
+            System.out.println("1. Registrar bungalow");
+            System.out.println("2. Buscar bungalow");
+            System.out.println("3. Eliminar bungalow");
+            System.out.println("4. Listar bungalow");
+            System.out.println("0. Volver");
+            System.out.print("Ingrese una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    clearScreen();
+                    registrarHospedaje();
+                    break;
+                case 2:
+                    clearScreen();
+                    buscarHospedaje();
+                    break;
+                case 3:
+                    clearScreen();
+                    eliminarHospedaje();
+                    break;
+                case 4:
+                    clearScreen();
+                    listarHospedajes();
+                    break;
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
                     break;
                 default:
                     System.out.println("Opción inválida. Intente nuevamente.");
@@ -162,12 +317,28 @@ public class Menu {
         }
     }
 
-    private static void listarUsuarios(ArrayList<UsuarioDto> usuarios) {
+    /*private static void listarUsuarios(ArrayList<UsuarioDto> usuarios) {
         UsuarioArray usuarioArray;
         System.out.println("=== Listado de Usuarios ===");
         for (UsuarioDto usuario : usuarios) {
             System.out.println(usuario);
         }
+    }*/
+    private static void listarUsuarios() {
+        List<UsuarioDto> usuarioDtos = usuarioFacade.getAllBungalow();
+       if (usuarioDtos.isEmpty()) {
+           System.out.println("No hay clientes!");
+       } else {
+           System.out.println("Lista de Clientes!");
+           for (UsuarioDto usuario : usuarioDtos) {
+               System.out.println("CODIGO: " + usuario.getUserId());
+               System.out.println("NOMBRE: " + usuario.getName());
+               System.out.println("APELLIDO: " + usuario.getLastName());
+               System.out.println("DNI: " + usuario.getDni());
+               System.out.println("TELEFONO: " + usuario.getTelefono());
+               System.out.println("---------------------");
+           }
+       }
     }
 
     private static void listarProductos(ArrayList<ProductosDto> productos) {
@@ -311,9 +482,9 @@ public class Menu {
         BungalowDto bungalowDto = bungalowFacade.getBungalow(codigo);
         if (bungalowDto != null) {
             System.out.println("Codigo: " + bungalowDto.getBungalowId());
-            System.out.println("Categoria: " +bungalowDto.getCategory());
-            System.out.println("Precio x Dia: " +bungalowDto.getPriceDay());
-            System.out.println("Estado: " +bungalowDto.getStatusRoom());
+            System.out.println("Categoria: " + bungalowDto.getCategory());
+            System.out.println("Precio x Dia: " + bungalowDto.getPriceDay());
+            System.out.println("Estado: " + bungalowDto.getStatusRoom());
         } else {
             System.out.println("No existe ese codigo de Bungalow");
         }

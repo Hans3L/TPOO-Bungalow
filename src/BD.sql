@@ -5,7 +5,11 @@ CREATE  TABLE IF NOT EXISTS BUNGALOW (bungalowId int primary key unique, categor
 /**tabla producto**/
 create table Producto(Producto_id int primary key auto_increment, Producto_name int(8),Producto_Detail varchar(35),Producto_Stock int(8),Producto_PrecioUnit double);
 /**tabla usuario**/
-create table usuarios(idPerson int primary key auto_increment,firstname varchar(35),lastname varchar(35),dni varchar(8),telefono varchar(9),email varchar(35));
+CREATE  TABLE IF NOT EXISTS USUARIO (UserId int primary key unique, FirstName varchar not null, LastName varchar, Dni varchar not null, Telefono Varchar);
+
+INSERT INTO usuario (UserId, FirstName, LastName, Dni, Telefono ) VALUE (10001,Julio,Fernandez,12345678,987654321);
+INSERT INTO usuario (UserId, FirstName, LastName, Dni, Telefono ) VALUE (10002,Juan,Sanchez,17645678,987654321);
+INSERT INTO usuario (UserId, FirstName, LastName, Dni, Telefono ) VALUE (10003,Pedro,Lopez,15645678,987654321);
 
 insert into usuarios(firstname,lastname,dni,telefono,email)values ("Juan", "Varillas", "12345678","123123123","jvarilas@gmail.com");
 INSERT INTO bungalow (bungalowId, category, priceDay, statusRoom ) VALUE (10001,1,150.0,1);

@@ -8,6 +8,8 @@ public class UsuarioDto {
     private String dni;
     private String telefono;
 
+    public UsuarioDto(){}
+
     public UsuarioDto(int userId, String name, String lastName, String dni, String telefono) {
         this.userId = userId;
         this.name = name;
