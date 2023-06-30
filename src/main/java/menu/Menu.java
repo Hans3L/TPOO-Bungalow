@@ -5,6 +5,7 @@ import main.java.dto.BungalowDto;
 import main.java.dto.ProductosDto;
 import main.java.dto.UsuarioDto;
 import main.java.facade.BungalowFacade;
+import main.java.facade.ProductoFacade;
 import main.java.facade.UsuarioFacade;
 
 import java.io.Console;
@@ -18,6 +19,7 @@ public class Menu {
     private static final String USER = "admin"; // Reemplaza "usuario" con el valor correcto
     private static final String PASS = "admin"; // Reemplaza "contrasena" con el valor correcto
     private static BungalowFacade bungalowFacade = new BungalowFacade();
+    private static ProductoFacade productoFacade = new ProductoFacade();
     private static UsuarioFacade usuarioFacade = new UsuarioFacade();
     private static Scanner scanner = new Scanner(System.in);
 
@@ -195,16 +197,16 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    //registrarProductos();
+                    registrarProductos();
                     break;
                 case 2:
-                    //buscarProductos();
+                    buscarProductos();
                     break;
                 case 3:
-                    //eliminarProductos();
+                    eliminarProductos();
                     break;
                 case 4:
-                    //listarProductos();
+                    listarProductos();
                     break;
                 case 0:
                     System.out.println("Volviendo al menú principal...");
@@ -341,13 +343,45 @@ public class Menu {
        }
     }
 
-    private static void listarProductos(ArrayList<ProductosDto> productos) {
+    /*private static void listarProductos(ArrayList<ProductosDto> productos) {
         System.out.println("=== Listado de Productos ===");
-        for (ProductosDto producto : productos) {
-            System.out.println(producto);
+       // for (ProductosDto producto : productos) {
+           // System.out.println(producto);
+       // }
+        List<ProductosDto> productosDto = productoFacade.getAllProducto();
+        if (productosDto.isEmpty()) {
+            System.out.println("No hay productos registrados");
+        } else {
+            System.out.println("Lista de stock de productos!");
+            for (ProductosDto producto : productosDto) {
+                System.out.println("CODIGO: " + producto.getProductId());
+                System.out.println("DETALLE DE PRODUCTO: " + producto.getDetail());
+                System.out.println("STOCK: " + producto.getStock());
+                System.out.println("PRECIO UNITARIO: " + producto.getPriceUnit());
+                System.out.println("---------------------");
+            }
+        }
+    }*/
+
+    private static void listarProductos() {
+        System.out.println("=== Listado de Productos ===");
+        // for (ProductosDto producto : productos) {
+        // System.out.println(producto);
+        // }
+        List<ProductosDto> productosDto = productoFacade.getAllProducto();
+        if (productosDto.isEmpty()) {
+            System.out.println("No hay productos registrados");
+        } else {
+            System.out.println("Lista de stock de productos!");
+            for (ProductosDto producto : productosDto) {
+                System.out.println("CODIGO: " + producto.getProductId());
+                System.out.println("DETALLE DE PRODUCTO: " + producto.getDetail());
+                System.out.println("STOCK: " + producto.getStock());
+                System.out.println("PRECIO UNITARIO: " + producto.getPriceUnit());
+                System.out.println("---------------------");
+            }
         }
     }
-
     /*private static void listarHospedajes(ArrayList<Bungalow> hospedajes) {
         System.out.println("=== Listado de Hospedajes ===");
         for (Bungalow hospedaje : hospedajes) {
@@ -432,15 +466,15 @@ public class Menu {
         }
     }
 
-    private static void buscarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
+   /* private static void buscarProductos(Scanner scanner, ArrayList<ProductosDto> producto) {
         System.out.println("=== Buscar Producto ===");
-        System.out.print("Ingrese el ID del producto: ");
+        System.out.print("Ingrese el código del producto: ");
         int id = scanner.nextInt();
 
         ProductosDto productoEncontrado = null;
-        for (ProductosDto producto : productos) {
-            if (producto.getProductId() == id) {
-                productoEncontrado = producto;
+        for (ProductosDto product : producto) {
+            if (product.getProductId() == id) {
+                productoEncontrado = product;
                 break;
             }
         }
@@ -451,7 +485,23 @@ public class Menu {
         } else {
             System.out.println("Producto no encontrado.");
         }
-    }
+    }*/
+
+   private static void buscarProductos() {
+       System.out.println("=== Buscar Producto ===");
+       System.out.print("Ingrese el código del producto: ");
+       int id = scanner.nextInt();
+       ProductosDto productosDto = productoFacade.getProducto(id);
+       if (productosDto != null) {
+           System.out.println("Código: " + productosDto.getProductId());
+           System.out.println("Detalle del producto: " + productosDto.getDetail());
+           System.out.println("Stock del producto: " + productosDto.getStock());
+           System.out.println("Precio unitario: " + productosDto.getPriceUnit());
+       } else {
+           System.out.println("No existe ese codigo de Producto");
+       }
+
+   }
 
     /*private static void buscarHospedaje(Scanner scanner, ArrayList<BungalowDto> bungalows) {
         System.out.println("=== Buscar Hospedaje ===");
@@ -490,7 +540,7 @@ public class Menu {
         }
     }
 
-    private static void eliminarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
+    /*private static void eliminarProductos(Scanner scanner, ArrayList<ProductosDto> productos) {
         System.out.println("=== Eliminar Producto ===");
         System.out.print("Ingrese el ID del producto a eliminar: ");
         int id = scanner.nextInt();
@@ -509,8 +559,20 @@ public class Menu {
         } else {
             System.out.println("Producto no encontrado.");
         }
-    }
+    }*/
 
+    private static void eliminarProductos() {
+        System.out.println("=== Eliminar Producto ===");
+        System.out.print("Ingrese el ID del producto a eliminar: ");
+        int id = scanner.nextInt();
+        ProductosDto productosDto = productoFacade.getProducto(id);
+        if (productosDto != null) {
+            productoFacade.deleteProducto(id);
+            System.out.println("El Producto se elimino correctamente");
+        } else {
+            System.out.println("No se encontro el producto con ese codigo");
+        }
+    }
     /*private static void eliminarHospedaje(Scanner scanner, ArrayList<BungalowDto> bungalows) {
         System.out.println("=== Eliminar Hospedaje ===");
         System.out.print("Ingrese el código del hospedaje a eliminar: ");
@@ -543,6 +605,29 @@ public class Menu {
         } else {
             System.out.println("No se encontro Bungalow con ese codigo");
         }
+    }
+
+    private static void registrarProductos() {
+        System.out.println("=== Registrar Producto ===");
+        System.out.print("Ingresa el código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Ingrese detalle del producto: ");
+        String detalle = scanner.next();
+        System.out.print("Ingrese el stock del producto: ");
+        int stock= scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Ingrese Precio unitario: ");
+        double PriceUnitario = scanner.nextInt();
+
+        ProductosDto productosDto = new ProductosDto();
+        productosDto.setProductId(codigo);
+        productosDto.setDetail(detalle);
+        productosDto.setStock(stock);
+        productosDto.setPriceUnit(PriceUnitario);
+
+        productoFacade.registerProducto(productosDto);
+        System.out.println("¡Producto registrado exitosamente!");
     }
 
     public static void login() {

@@ -6,6 +6,8 @@ public class ProductosDto {
     private int stock;
     private double priceUnit;
 
+    public ProductosDto(){}
+
     public ProductosDto(int productId, String detail, int stock, double priceUnit) {
         this.productId = productId;
         this.detail = detail;
