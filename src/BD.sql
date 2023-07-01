@@ -3,7 +3,7 @@ USE HOTEL;
 /**tabla bungalow**/
 CREATE  TABLE IF NOT EXISTS BUNGALOW (bungalowId int primary key unique, category int not null, priceDay double, statusRoom int not null);
 /**tabla producto**/
-create table Producto(Producto_id int primary key auto_increment, Producto_name int(8),Producto_Detail varchar(35),Producto_Stock int(8),Producto_PrecioUnit double);
+create table Producto(Producto_id int primary key auto_increment, Producto_name varchar(8),Producto_Detail varchar(35),Producto_Stock int(8),Producto_PrecioUnit double);
 /**tabla usuario**/
 CREATE  TABLE IF NOT EXISTS USUARIO (UserId int primary key unique, FirstName varchar not null, LastName varchar, Dni varchar not null, Telefono Varchar);
 

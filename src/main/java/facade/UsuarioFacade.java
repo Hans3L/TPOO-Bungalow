@@ -13,7 +13,7 @@ public class UsuarioFacade {
         this.usuarioImpl = new UsuarioDao();
     }
 
-    public void registerBungalow(UsuarioDto usuario) {
+    public void registerUser(UsuarioDto usuario) {
         usuarioImpl.registerUsuario(usuario);
     }
 
@@ -25,7 +25,7 @@ public class UsuarioFacade {
         usuarioImpl.updateUsuario(usuario);
     }
 
-    public void deleteBungalow(int id) {
+    public void deleteUser(int id) {
         usuarioImpl.deleteUsuario(id);
     }
 

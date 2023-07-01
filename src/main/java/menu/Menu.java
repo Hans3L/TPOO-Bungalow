@@ -154,15 +154,16 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     clearScreen();
-                    registrarUsuario(scanner, usuarios);
+                    registrarUsuario();
                     break;
                 case 2:
                     clearScreen();
-                    buscarUsuario(scanner, usuarios);
+                    //buscarUsuario(scanner, usuarios);
+                    buscarUsuario();
                     break;
                 case 3:
                     clearScreen();
-                    eliminarUsuario(scanner, usuarios);
+                    eliminarUsuario();
                     break;
                 case 4:
                     clearScreen();
@@ -195,15 +196,19 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
+                    clearScreen();
                     //registrarProductos();
                     break;
                 case 2:
+                    clearScreen();
                     //buscarProductos();
                     break;
                 case 3:
+                    clearScreen();
                     //eliminarProductos();
                     break;
                 case 4:
+                    clearScreen();
                     //listarProductos();
                     break;
                 case 0:
@@ -255,12 +260,11 @@ public class Menu {
                     System.out.println("Opción inválida. Intente nuevamente.");
                     break;
             }
-
             System.out.println();
         } while (opcion != 0);
     }
 
-    private static void registrarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+    /*private static void registrarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Registrar Usuario ===");
         System.out.print("Código: ");
         int codigo = scanner.nextInt();
@@ -276,6 +280,30 @@ public class Menu {
 
         UsuarioDto usuario = new UsuarioDto(codigo, nombre, apellido, dni, telefono);
         usuarios.add(usuario);
+        System.out.println("¡Usuario registrado exitosamente!");
+    }*/
+
+    private static void registrarUsuario() {
+        System.out.println("=== Registrar Usuario ===");
+        System.out.print("Código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Apellido: ");
+        String apellido = scanner.nextLine();
+        System.out.print("DNI: ");
+        String dni = scanner.nextLine();
+        System.out.print("Teléfono: ");
+        String telefono = scanner.nextLine();
+
+        UsuarioDto usuario = new UsuarioDto();
+        usuario.setUserId(codigo);
+        usuario.setName(nombre);
+        usuario.setLastName(apellido);
+        usuario.setDni(dni);
+        usuario.setTelefono(telefono);
+        usuarioFacade.registerUser(usuario);
         System.out.println("¡Usuario registrado exitosamente!");
     }
 
@@ -296,7 +324,7 @@ public class Menu {
         System.out.println("¡Producto registrado exitosamente!");
     }
 
-    private static void eliminarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+    /*private static void eliminarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Eliminar Usuario===");
         System.out.print("Ingrese el código del usuario a eliminar: ");
         int codigo = scanner.nextInt();
@@ -315,6 +343,21 @@ public class Menu {
         } else {
             System.out.println("Usuario no encontrado.");
         }
+    }*/
+
+    private static void eliminarUsuario() {
+        System.out.println("=== Eliminar Usuario===");
+        System.out.print("Ingrese el código del usuario a eliminar: ");
+        int codigo = scanner.nextInt();
+
+        UsuarioDto usuarioDto = new UsuarioDto();
+        usuarioDto.setUserId(codigo);
+        if (usuarioDto != null) {
+            usuarioFacade.deleteUser(codigo);
+            System.out.println("Usuario eliminado exitosamente.");
+        } else {
+            System.out.println("Usuario no encontrado.");
+        }
     }
 
     /*private static void listarUsuarios(ArrayList<UsuarioDto> usuarios) {
@@ -326,19 +369,19 @@ public class Menu {
     }*/
     private static void listarUsuarios() {
         List<UsuarioDto> usuarioDtos = usuarioFacade.getAllBungalow();
-       if (usuarioDtos.isEmpty()) {
-           System.out.println("No hay clientes!");
-       } else {
-           System.out.println("Lista de Clientes!");
-           for (UsuarioDto usuario : usuarioDtos) {
-               System.out.println("CODIGO: " + usuario.getUserId());
-               System.out.println("NOMBRE: " + usuario.getName());
-               System.out.println("APELLIDO: " + usuario.getLastName());
-               System.out.println("DNI: " + usuario.getDni());
-               System.out.println("TELEFONO: " + usuario.getTelefono());
-               System.out.println("---------------------");
-           }
-       }
+        if (usuarioDtos.isEmpty()) {
+            System.out.println("No hay clientes!");
+        } else {
+            System.out.println("Lista de Clientes!");
+            for (UsuarioDto usuario : usuarioDtos) {
+                System.out.println("CODIGO: " + usuario.getUserId());
+                System.out.println("NOMBRE: " + usuario.getName());
+                System.out.println("APELLIDO: " + usuario.getLastName());
+                System.out.println("DNI: " + usuario.getDni());
+                System.out.println("TELEFONO: " + usuario.getTelefono());
+                System.out.println("---------------------");
+            }
+        }
     }
 
     private static void listarProductos(ArrayList<ProductosDto> productos) {
@@ -411,7 +454,7 @@ public class Menu {
         System.out.println("¡Hospedaje registrado exitosamente!");
     }
 
-    private static void buscarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+    /*private static void buscarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Buscar Usuario ===");
         System.out.print("Ingrese el código del usuario: ");
         int codigo = scanner.nextInt();
@@ -429,6 +472,23 @@ public class Menu {
             System.out.println(usuarioEncontrado);
         } else {
             System.out.println("Usuario no encontrado.");
+        }
+    }*/
+
+    private static void buscarUsuario() {
+        System.out.println("=== Buscar Usuario ===");
+        System.out.print("Ingrese el código del usuario: ");
+        int codigo = scanner.nextInt();
+
+        UsuarioDto usuarioDto = usuarioFacade.getUsuario(codigo);
+        if (usuarioDto != null) {
+            System.out.println("Codigo: " + usuarioDto.getUserId());
+            System.out.println("Nombre: " + usuarioDto.getName());
+            System.out.println("Apellido: " + usuarioDto.getLastName());
+            System.out.println("Dni: " + usuarioDto.getDni());
+            System.out.println("Telefono: " + usuarioDto.getTelefono());
+        } else {
+            System.out.println("No existe ese codigo de usuario");
         }
     }
 
