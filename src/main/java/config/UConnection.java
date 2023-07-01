@@ -19,6 +19,7 @@ public class UConnection {
                 String user = rb.getString("user");
                 String pass = rb.getString("pass");
 
+
                 Class.forName(driver);
                 con = DriverManager.getConnection(url, user, pass);
             }
