@@ -1,7 +1,6 @@
 package main.java.dao;
 
 import main.java.config.UConnection;
-import main.java.dto.BungalowDto;
 import main.java.dto.ProductosDto;
 
 import java.sql.*;
@@ -12,6 +11,7 @@ public class ProductoDao implements ProductoImpl {
     Connection con = null;
     PreparedStatement pstm = null;
     ResultSet rs = null;
+
     @Override
     public void registerProducto(ProductosDto producto) {
         try {
@@ -148,5 +148,35 @@ public class ProductoDao implements ProductoImpl {
         }
     }
 
+    @Override
+    public void updateStock(int idProd, int cantidad) {
+        try {
+            con = UConnection.getConnection();
+            con.setAutoCommit(false);
+            String query = "UPDATE producto SET Producto_Stock = ? WHERE Producto_id=?";
+            pstm = con.prepareStatement(query);
+            pstm.setInt(1, cantidad);
+            pstm.setInt(2, idProd);
+
+            int outcome = pstm.executeUpdate();
+
+            if (outcome == 1) {
+                con.commit();
+                System.out.println("Se actualizo stock!");
+            } else {
+                throw new RuntimeException("No se pudo actualizar el stock");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (pstm != null) pstm.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
     }
+}
 

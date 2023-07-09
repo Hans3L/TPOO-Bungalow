@@ -1,17 +1,18 @@
 package main.java.menu;
 
 import main.java.arreglos.UsuarioArray;
+import main.java.dao.ConsumptionDao;
 import main.java.dto.BungalowDto;
+import main.java.dto.ConsumptionDto;
 import main.java.dto.ProductosDto;
 import main.java.dto.UsuarioDto;
 import main.java.facade.BungalowFacade;
+import main.java.facade.ConsumptionFacade;
 import main.java.facade.ProductoFacade;
 import main.java.facade.UsuarioFacade;
 
 import java.io.Console;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Menu {
@@ -21,6 +22,9 @@ public class Menu {
     private static BungalowFacade bungalowFacade = new BungalowFacade();
     private static ProductoFacade productoFacade = new ProductoFacade();
     private static UsuarioFacade usuarioFacade = new UsuarioFacade();
+    private static ConsumptionFacade consumptionFacade = new ConsumptionFacade();
+    static int ultimoCodigo = 50000;
+    //private static ConsumptionDao consumptionDao = new ConsumptionDao();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -28,16 +32,18 @@ public class Menu {
         login();
         UsuarioArray userArray;
 
-        ArrayList<UsuarioDto> usuarios = new ArrayList<>();
+        /*ArrayList<UsuarioDto> usuarios = new ArrayList<>();
         ArrayList<ProductosDto> productos = new ArrayList<>();
         ArrayList<BungalowDto> bungalows = new ArrayList<>();
-
+*/
         int opcion;
         do {
             System.out.println("==== MENÚ ====");
             System.out.println("1. Usuario");
             System.out.println("2. Bungalow");
             System.out.println("3. Producto");
+            System.out.println("4. Consumos y Pago");
+            System.out.println("5. Utilidario");
             System.out.println("0. Salir");
             System.out.print("Ingrese una opción: ");
             opcion = scanner.nextInt();
@@ -46,7 +52,8 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     clearScreen();
-                    menuUsuario(scanner, usuarios);
+                    //menuUsuario(scanner, usuarios);
+                    menuUsuario();
                     break;
                 case 2:
                     clearScreen();
@@ -55,6 +62,14 @@ public class Menu {
                 case 3:
                     clearScreen();
                     menuProducto();
+                    break;
+                case 4:
+                    clearScreen();
+                    menuConsumo();
+                    break;
+                case 5:
+                    clearScreen();
+                    menuPago();
                     break;
                 case 0:
                     System.out.println("¡Hasta luego!");
@@ -140,7 +155,7 @@ public class Menu {
         } while (opcion != 0);*/
     }
 
-    public static void menuUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+    public static void menuUsuario() {
         int opcion;
         do {
             System.out.println("==== MANTENIMIENTO DE USUARIOS ====");
@@ -156,15 +171,16 @@ public class Menu {
             switch (opcion) {
                 case 1:
                     clearScreen();
-                    registrarUsuario(scanner, usuarios);
+                    //registrarUsuario(scanner, usuarios);
+                    registrarUsuario();
                     break;
                 case 2:
                     clearScreen();
-                    buscarUsuario(scanner, usuarios);
+                    //buscarUsuario(scanner, usuarios);
                     break;
                 case 3:
                     clearScreen();
-                    eliminarUsuario(scanner, usuarios);
+                    //eliminarUsuario(scanner, usuarios);
                     break;
                 case 4:
                     clearScreen();
@@ -197,15 +213,19 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
+                    clearScreen();
                     registrarProductos();
                     break;
                 case 2:
+                    clearScreen();
                     buscarProductos();
                     break;
                 case 3:
+                    clearScreen();
                     eliminarProductos();
                     break;
                 case 4:
+                    clearScreen();
                     listarProductos();
                     break;
                 case 0:
@@ -257,12 +277,45 @@ public class Menu {
                     System.out.println("Opción inválida. Intente nuevamente.");
                     break;
             }
-
             System.out.println();
         } while (opcion != 0);
     }
 
-    private static void registrarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
+    public static void menuConsumo() {
+        int opcion;
+        do {
+            System.out.println("==== MENU DE CONSUMO ====");
+            System.out.println("1. Registrar consumo");
+            System.out.println("2. Listar consumo de cliente");
+            System.out.println("0. Volver");
+            System.out.print("Ingrese una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer de entrada
+
+            switch (opcion) {
+                case 1:
+                    clearScreen();
+                    registrarConsumo();
+                    break;
+                case 2:
+                    clearScreen();
+                    listarConsumo();
+                    break;
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+            System.out.println();
+        } while (opcion != 0);
+    }
+
+    public static void menuPago() {
+    }
+
+    /*private static void registrarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Registrar Usuario ===");
         System.out.print("Código: ");
         int codigo = scanner.nextInt();
@@ -279,9 +332,96 @@ public class Menu {
         UsuarioDto usuario = new UsuarioDto(codigo, nombre, apellido, dni, telefono);
         usuarios.add(usuario);
         System.out.println("¡Usuario registrado exitosamente!");
+    }*/
+
+    public static int generateCodeConsumption(){
+        int nuevoCodigo = codigoCorrelativo();
+        return nuevoCodigo;
     }
 
-    private static void registrarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
+    public static int codigoCorrelativo() {
+        ultimoCodigo++;
+        return ultimoCodigo;
+    }
+
+    public static void listarConsumo(){
+        System.out.println("=== Buscar Consumo ===");
+        System.out.print("Ingrese el código del Usuario: ");
+        int codigo = scanner.nextInt();
+
+        List<ConsumptionDto> consumptionDtoList = consumptionFacade.listProductForIdUser(codigo);
+
+        if (consumptionDtoList.isEmpty()) {
+            System.out.println("No existe consumo");
+        } else {
+            for (ConsumptionDto consumptionDto1 : consumptionDtoList){
+                System.out.println("Lista de Consumo!");
+                System.out.println("NOMBRES: " + consumptionDto1.getUsuarioDto().getName() + " " + consumptionDto1.getUsuarioDto().getLastName());
+                System.out.println("DETALLE: " + consumptionDto1.getProductosDto().getDetail());
+                System.out.println("CANTIDAD: " + consumptionDto1.getQuantity());
+                System.out.println("FECHA CONSUMO: " + consumptionDto1.getDate());
+                System.out.println("---------------------");
+            }
+        }
+    }
+
+    public static void registrarConsumo() {
+
+        Calendar calendar = Calendar.getInstance();
+        Date fechaActual = calendar.getTime();
+
+        System.out.println("=== Registro de Consumo ===");
+
+        System.out.print("Ingrese el ID de Usuario: ");
+        int idUsuario = scanner.nextInt();
+
+        System.out.print("Ingrese el ID de Bungalow: ");
+        int idBungalow = scanner.nextInt();
+
+        System.out.print("Ingrese el ID de Producto: ");
+        int idProducto = scanner.nextInt();
+
+        //System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
+        //String fecha = scanner.next();
+
+        System.out.print("Ingrese la cantidad: ");
+        int cantidad = scanner.nextInt();
+
+        UsuarioDto idUser = usuarioFacade.getUsuario(idUsuario);
+        BungalowDto idBun = bungalowFacade.getBungalow(idBungalow);
+        ProductosDto idProd = productoFacade.getProducto(idProducto);
+        ConsumptionDto consumptionDto = new ConsumptionDto(idUser, idBun, idProd, fechaActual, cantidad);
+        consumptionFacade.addConsumption(consumptionDto);
+        System.out.println("Consumo registrado exitosamente!");
+
+        /*try {
+            consumptionDao.registerConsumption(consumptionDto);
+            System.out.println("Consumo registrado exitosamente!");
+        } catch (Exception e) {
+            System.out.println("Error al registrar el consumo: " + e.getMessage());
+        }*/
+    }
+
+    private static void registrarUsuario() {
+        System.out.println("=== Registrar Usuario ===");
+        System.out.print("Código: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer de entrada
+        System.out.print("Nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Apellido: ");
+        String apellido = scanner.nextLine();
+        System.out.print("DNI: ");
+        String dni = scanner.nextLine();
+        System.out.print("Teléfono: ");
+        String telefono = scanner.nextLine();
+
+        UsuarioDto usuario = new UsuarioDto(codigo, nombre, apellido, dni, telefono);
+        usuarioFacade.registerUser(usuario);
+        System.out.println("¡Usuario registrado exitosamente!");
+    }
+
+    /*private static void registrarProducto(Scanner scanner, ArrayList<ProductosDto> productos) {
         System.out.println("=== Registrar Producto ===");
         System.out.print("ID del producto: ");
         int id = scanner.nextInt();
@@ -296,7 +436,7 @@ public class Menu {
         ProductosDto producto = new ProductosDto(id, detalles, stock, precioUnitario);
         productos.add(producto);
         System.out.println("¡Producto registrado exitosamente!");
-    }
+    }*/
 
     private static void eliminarUsuario(Scanner scanner, ArrayList<UsuarioDto> usuarios) {
         System.out.println("=== Eliminar Usuario===");
@@ -328,19 +468,19 @@ public class Menu {
     }*/
     private static void listarUsuarios() {
         List<UsuarioDto> usuarioDtos = usuarioFacade.getAllBungalow();
-       if (usuarioDtos.isEmpty()) {
-           System.out.println("No hay clientes!");
-       } else {
-           System.out.println("Lista de Clientes!");
-           for (UsuarioDto usuario : usuarioDtos) {
-               System.out.println("CODIGO: " + usuario.getUserId());
-               System.out.println("NOMBRE: " + usuario.getName());
-               System.out.println("APELLIDO: " + usuario.getLastName());
-               System.out.println("DNI: " + usuario.getDni());
-               System.out.println("TELEFONO: " + usuario.getTelefono());
-               System.out.println("---------------------");
-           }
-       }
+        if (usuarioDtos.isEmpty()) {
+            System.out.println("No hay clientes!");
+        } else {
+            System.out.println("Lista de Clientes!");
+            for (UsuarioDto usuario : usuarioDtos) {
+                System.out.println("CODIGO: " + usuario.getUserId());
+                System.out.println("NOMBRE: " + usuario.getName());
+                System.out.println("APELLIDO: " + usuario.getLastName());
+                System.out.println("DNI: " + usuario.getDni());
+                System.out.println("TELEFONO: " + usuario.getTelefono());
+                System.out.println("---------------------");
+            }
+        }
     }
 
     /*private static void listarProductos(ArrayList<ProductosDto> productos) {
@@ -382,12 +522,26 @@ public class Menu {
             }
         }
     }
+
     /*private static void listarHospedajes(ArrayList<Bungalow> hospedajes) {
         System.out.println("=== Listado de Hospedajes ===");
         for (Bungalow hospedaje : hospedajes) {
             System.out.println(hospedaje);
         }
     }*/
+
+    public static String readStatusRoom(int valor) {
+
+        String estado = "";
+
+        if (valor == 0) {
+            estado = "Libre";
+        } else {
+            estado = "Ocupado";
+        }
+        return estado;
+    }
+
     private static void listarHospedajes() {
         List<BungalowDto> bungalowDto = bungalowFacade.getAllBungalow();
         if (bungalowDto.isEmpty()) {
@@ -398,7 +552,7 @@ public class Menu {
                 System.out.println("CODIGO: " + bungalow.getBungalowId());
                 System.out.println("CATEGORIA: " + bungalow.getCategory());
                 System.out.println("PRECIO: " + bungalow.getPriceDay());
-                System.out.println("ESTADO: " + bungalow.getStatusRoom());
+                System.out.println("ESTADO: " + readStatusRoom(bungalow.getStatusRoom()));
                 System.out.println("---------------------");
             }
         }
@@ -422,6 +576,18 @@ public class Menu {
         System.out.println("¡Hospedaje registrado exitosamente!");
     }*/
 
+    private static double categoryForPrice(int category) {
+
+        switch (category) {
+            case 1:
+                return 100.00;
+            case 2:
+                return 250.00;
+            default:
+                return 300.00;
+        }
+    }
+
     private static void registrarHospedaje() {
         System.out.println("=== Registrar Hospedaje ===");
         System.out.print("Ingresa el código: ");
@@ -429,8 +595,9 @@ public class Menu {
         scanner.nextLine(); // Limpiar el buffer de entrada
         System.out.print("Ingrese categoría: ");
         int categoria = scanner.nextInt();
-        System.out.print("Ingrese Precio por día: ");
-        double precioDia = scanner.nextDouble();
+        //System.out.print("Ingrese Precio por día: ");
+        //double precioDia = scanner.nextDouble();
+        double precioDia = categoryForPrice(categoria);
         scanner.nextLine(); // Limpiar el buffer de entrada
         System.out.print("Ingrese Estado: ");
         int estado = scanner.nextInt();
@@ -487,21 +654,20 @@ public class Menu {
         }
     }*/
 
-   private static void buscarProductos() {
-       System.out.println("=== Buscar Producto ===");
-       System.out.print("Ingrese el código del producto: ");
-       int id = scanner.nextInt();
-       ProductosDto productosDto = productoFacade.getProducto(id);
-       if (productosDto != null) {
-           System.out.println("Código: " + productosDto.getProductId());
-           System.out.println("Detalle del producto: " + productosDto.getDetail());
-           System.out.println("Stock del producto: " + productosDto.getStock());
-           System.out.println("Precio unitario: " + productosDto.getPriceUnit());
-       } else {
-           System.out.println("No existe ese codigo de Producto");
-       }
-
-   }
+    private static void buscarProductos() {
+        System.out.println("=== Buscar Producto ===");
+        System.out.print("Ingrese el código del producto: ");
+        int id = scanner.nextInt();
+        ProductosDto productosDto = productoFacade.getProducto(id);
+        if (productosDto != null) {
+            System.out.println("Código: " + productosDto.getProductId());
+            System.out.println("Detalle del producto: " + productosDto.getDetail());
+            System.out.println("Stock del producto: " + productosDto.getStock());
+            System.out.println("Precio unitario: " + productosDto.getPriceUnit());
+        } else {
+            System.out.println("No existe ese codigo de Producto");
+        }
+    }
 
     /*private static void buscarHospedaje(Scanner scanner, ArrayList<BungalowDto> bungalows) {
         System.out.println("=== Buscar Hospedaje ===");
@@ -613,12 +779,11 @@ public class Menu {
         int codigo = scanner.nextInt();
         scanner.nextLine(); // Limpiar el buffer de entrada
         System.out.print("Ingrese detalle del producto: ");
-        String detalle = scanner.next();
+        String detalle = scanner.nextLine();
         System.out.print("Ingrese el stock del producto: ");
-        int stock= scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer de entrada
+        int stock = scanner.nextInt();
         System.out.print("Ingrese Precio unitario: ");
-        double PriceUnitario = scanner.nextInt();
+        double PriceUnitario = scanner.nextDouble();
 
         ProductosDto productosDto = new ProductosDto();
         productosDto.setProductId(codigo);

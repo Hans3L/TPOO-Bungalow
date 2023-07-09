@@ -2,6 +2,7 @@ package main.java.dao;
 
 import main.java.dto.ProductosDto;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ProductoImpl {
@@ -10,4 +11,5 @@ public interface ProductoImpl {
     void updateProducto(ProductosDto producto);
     void deleteProducto(int id);
     List<ProductosDto> getAllProducto();
+    void updateStock(int idProd, int cantidad);
 }
